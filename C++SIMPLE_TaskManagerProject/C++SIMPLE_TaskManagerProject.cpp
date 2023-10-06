@@ -153,6 +153,7 @@ public:
 
         m_tasks[index].update(title, description);
         std::system("cls");
+        
         return;
     }
 
@@ -190,6 +191,7 @@ public:
             return true;
 
         std::system("cls");
+        
         return false;
     }
 
@@ -230,7 +232,6 @@ public:
             {
                 std::cout << "Index must be valid. Please enter a valid index.\n";
                 std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
         } while (!indexUpdated);
 
@@ -281,6 +282,8 @@ public:
                 map[index].t_description = description;
             }
         }
+
+        return;
     }
 
     const void loadData()
@@ -296,6 +299,7 @@ public:
 
         std::system("cls");
         std::cout << "Data has been loaded from the file successfully.\n";
+        
         return;
     }
 
@@ -349,13 +353,16 @@ const void printMenu()
         << "7. Print saved Data\n"
         << "8. Exit\n"
         << "Enter your choice (1-8): ";
+    
     return;
 }
 
 int main()
 {
     std::cout << "Choose number of action (1 - 7)\n";
+    
     printMenu();
+    
     Tasks task;
     for (;;)
     {
