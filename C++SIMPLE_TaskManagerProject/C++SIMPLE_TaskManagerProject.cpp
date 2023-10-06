@@ -122,7 +122,6 @@ public:
             {
                 std::cout << "Index must be valid. Please enter a valid index.\n";
                 std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
         } while (!indexUpdated);
 
