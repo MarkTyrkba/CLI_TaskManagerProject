@@ -8,22 +8,6 @@
 //code by Mark Tyrkba
 //https://github.com/MarkTyrkba
 
-//template <typename K, typename V>
-//const std::unordered_map<std::size_t,Task> mergeMaps(std::unordered_map<K, V>& destination, const std::unordered_map<K, V>& source)
-//{
-//    for (const auto& entry : source)
-//    {
-//        const K& key = entry.first;
-//        const V& value = entry.second;
-//        
-//        if (destination.find(key) != destination.end())
-//            destination[key] = value;
-//        
-//        else
-//            destination[key] = value;
-//    }
-//}
-
 class Task
 {
 public:
