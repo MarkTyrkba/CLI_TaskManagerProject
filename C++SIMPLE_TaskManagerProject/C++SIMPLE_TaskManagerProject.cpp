@@ -8,6 +8,22 @@
 //code by Mark Tyrkba
 //https://github.com/MarkTyrkba
 
+//template <typename K, typename V>
+//const std::unordered_map<std::size_t,Task> mergeMaps(std::unordered_map<K, V>& destination, const std::unordered_map<K, V>& source)
+//{
+//    for (const auto& entry : source)
+//    {
+//        const K& key = entry.first;
+//        const V& value = entry.second;
+//        
+//        if (destination.find(key) != destination.end())
+//            destination[key] = value;
+//        
+//        else
+//            destination[key] = value;
+//    }
+//}
+
 class Task
 {
 public:
@@ -208,6 +224,7 @@ public:
             if (ifDA)
             {
                 m_tasks.clear();
+                m_index = 1;
                 std::cout << "\nDeleted succesfully!\n" << std::endl;
                 return;
             }
@@ -265,6 +282,23 @@ public:
         return;
     }
 
+    const void readData(std::ifstream& inFile, std::unordered_map<std::size_t, Task>& map)
+    {
+        std::string line;
+        while (std::getline(inFile, line))
+        {
+            std::size_t index;
+            std::string title, description;
+
+            std::istringstream iss(line);
+            if (iss >> index >> title >> description)
+            {
+                map[index].t_title = title;
+                map[index].t_description = description;
+            }
+        }
+    }
+
     const void loadData()
     {
         std::ifstream inFile("output.txt");
@@ -274,28 +308,26 @@ public:
             return;
         }
 
-        if (!m_tasks.empty())
+        readData(inFile, m_tasks);
+
+        std::system("cls");
+        std::cout << "Data has been loaded from the file successfully.\n";
+        return;
+    }
+
+    const void printSavedData() const
+    {
+        std::ifstream inFile("output.txt");
+
+        std::system("cls");
+
+        if (!inFile)
         {
-            bool concr = false, changed = false;
-            std::cout << "Clear all past data in your talk list?\n0 -> No\n1 -> Yes\n" << std::endl;
-
-            do
-            {
-                std::cin >> concr;
-                if (concr != 0 && concr != 1)
-                    std::cout << "Input can be only 1 or 2\n";
-
-                else
-                    changed = true;
-            } while (!changed);
-
-            if (concr)
-            {
-                m_tasks.clear();
-                std::system("cls");
-                std::cout << "Data cleared successfully\n";
-            }
+            std::cerr << "Failed to open the file for reading." << std::endl;
+            return;
         }
+
+        std::cout << "Data from 'output.txt':\n";
 
         std::string line;
         while (std::getline(inFile, line))
@@ -305,16 +337,13 @@ public:
 
             std::istringstream iss(line);
             if (iss >> index >> title >> description)
-            {
-                m_tasks[index].t_title = title;
-                m_tasks[index].t_description = description;
-            }
+                std::cout << "Index: " << index << "\nTitle: " << title << "\nDescription: " << description << "\n\n";
         }
 
-        std::system("cls");
-        std::cout << "Data has been loaded from the file successfully.\n";
+        inFile.close();
         return;
     }
+
 
 private:
     std::size_t m_index = 1;
@@ -325,15 +354,17 @@ private:
 
 const void printMenu()
 {
-    std::cout << "Task Manager Menu:\n"
+    std::cout 
+        << "Task Manager Menu:\n"
         << "1. Add Task\n"
         << "2. View Tasks\n"
         << "3. Update Task\n"
         << "4. Delete Task\n"
         << "5. Save Data\n"
         << "6. Load Data\n"
-        << "7. Exit\n"
-        << "Enter your choice (1-7): ";
+        << "7. Print saved Data\n"
+        << "8. Exit\n"
+        << "Enter your choice (1-8): ";
     return;
 }
 
@@ -369,6 +400,9 @@ int main()
             task.loadData();
             break;
         case 7:
+            task.printSavedData();
+            break;
+        case 8:
             std::cout << "Exit succeeded" << std::endl;
             return 0;
         default:
