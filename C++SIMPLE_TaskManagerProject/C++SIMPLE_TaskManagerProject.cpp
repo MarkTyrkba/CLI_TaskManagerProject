@@ -326,7 +326,7 @@ private:
 };
 
 
-const void printMenu()
+const void printMenu() const
 {
     std::cout << "Task Manager Menu:\n"
         << "1. Add Task\n"
