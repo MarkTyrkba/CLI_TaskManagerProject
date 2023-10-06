@@ -188,9 +188,7 @@ public:
             return false;
 
         else
-        {
             return true;
-        }
 
         std::system("cls");
         return false;
@@ -326,7 +324,7 @@ private:
 };
 
 
-const void printMenu() const
+const void printMenu()
 {
     std::cout << "Task Manager Menu:\n"
         << "1. Add Task\n"
