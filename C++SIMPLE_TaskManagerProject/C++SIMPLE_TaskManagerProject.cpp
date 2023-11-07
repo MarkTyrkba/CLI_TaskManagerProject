@@ -4,6 +4,7 @@
 #include <unordered_map>// hashmap
 #include <fstream>//       std::ifstream
 #include <sstream>//       std::istringstream
+#include <functional> //   std::function
 
 //code by Mark Tyrkba
 //https://github.com/MarkTyrkba
@@ -15,16 +16,14 @@ public:
 
     Task(std::string title, std::string description) : t_title(title), t_description(description) {}
 
-    const void update(const std::string& title, const std::string& description)
+    void update(const std::string& title, const std::string& description)
     {
         if (!title.empty())
             t_title = title;
 
         if (!description.empty())
             t_description = description;
-
-        return;
-    }
+   }
 
 private:
     std::string t_title, t_description;
@@ -35,7 +34,7 @@ private:
 class Tasks
 {
 public:
-    const void addTask()
+    void addTask()
     {
         std::string title, description;
         bool titleUpdated, descriptionUpdated;
@@ -78,11 +77,10 @@ public:
 
         std::system("cls");
         std::cout << "Task has been created successfully\n\n";
-        return;
-    }
+   }
 
 
-    const void viewTasks()
+    void viewTasks()
     {
         std::system("cls");
         if (m_tasks.empty())
@@ -97,11 +95,9 @@ public:
             std::cout << "Task " << index << ":\n";
             std::cout << "Title: " << task.t_title << "\nDescription: " << task.t_description << std::endl << std::endl;
         }
-
-        return;
     }
 
-    const void updateTask()
+    void updateTask()
     {
         std::size_t index;
         std::string title, description;
@@ -153,11 +149,9 @@ public:
 
         m_tasks[index].update(title, description);
         std::system("cls");
-        
-        return;
     }
 
-    const bool checkIfDeleteAllOf()
+    bool checkIfDeleteAllOf()
     {
         bool updated = false;
         int checker;
@@ -191,11 +185,11 @@ public:
             return true;
 
         std::system("cls");
-        
+
         return false;
     }
 
-    const void deleteTask()
+    void deleteTask()
     {
         std::system("cls");
         if (m_tasks.empty())
@@ -238,10 +232,9 @@ public:
         m_tasks.erase(index);
 
         std::cout << "Deleted succesfully\n";
-        return;
     }
 
-    const void saveData() const
+    void saveData() const
     {
         if (m_tasks.empty())
         {
@@ -264,10 +257,9 @@ public:
 
         std::system("cls");
         std::cout << "Data has been saved successfully in project directory\n";
-        return;
     }
 
-    const void readData(std::ifstream& inFile, std::unordered_map<std::size_t, Task>& map)
+    void readData(std::ifstream& inFile, std::unordered_map<std::size_t, Task>& map)
     {
         std::string line;
         while (std::getline(inFile, line))
@@ -282,11 +274,9 @@ public:
                 map[index].t_description = description;
             }
         }
-
-        return;
     }
 
-    const void loadData()
+    void loadData()
     {
         std::ifstream inFile("output.txt");
         if (!inFile)
@@ -299,11 +289,9 @@ public:
 
         std::system("cls");
         std::cout << "Data has been loaded from the file successfully.\n";
-        
-        return;
     }
 
-    const void printSavedData() const
+    static void printSavedData()
     {
         std::ifstream inFile("output.txt");
 
@@ -329,7 +317,6 @@ public:
         }
 
         inFile.close();
-        return;
     }
 
 
@@ -340,9 +327,9 @@ private:
 };
 
 
-const void printMenu()
+void printMenu()
 {
-    std::cout 
+    std::cout
         << "Task Manager Menu:\n"
         << "1. Add Task\n"
         << "2. View Tasks\n"
@@ -353,53 +340,38 @@ const void printMenu()
         << "7. Print saved Data\n"
         << "8. Exit\n"
         << "Enter your choice (1-8): ";
-    
-    return;
 }
 
 int main()
 {
     std::cout << "Choose number of action (1 - 7)\n";
-    
+
     printMenu();
-    
+
     Tasks task;
+
+    std::unordered_map<int, std::function<void()> > actions = {
+            {1, [&task]() { task.addTask(); }},
+            {2, [&task]() { task.viewTasks(); }},
+            {3, [&task]() { task.updateTask(); }},
+            {4, [&task]() { task.deleteTask(); }},
+            {5, [&task]() { task.saveData(); }},
+            {6, [&task]() { task.loadData(); }},
+            {7, [&task]() { task.printSavedData(); }},
+            {8, []() { std::cout << "Exit succeeded" << std::endl; }},
+    };
+
     for (;;)
     {
         short action;
         std::cin >> action;
         std::cin.ignore();
 
-        switch (action)
-        {
-        case 1:
-            task.addTask();
-            break;
-        case 2:
-            task.viewTasks();
-            break;
-        case 3:
-            task.updateTask();
-            break;
-        case 4:
-            task.deleteTask();
-            break;
-        case 5:
-            task.saveData();
-            break;
-        case 6:
-            task.loadData();
-            break;
-        case 7:
-            task.printSavedData();
-            break;
-        case 8:
-            std::cout << "Exit succeeded" << std::endl;
-            return 0;
-        default:
+        if (actions.find(action) != actions.end())
+            actions[action]();
+
+        else
             std::cout << "Invalid option. Please select a valid action." << std::endl;
-            break;
-        }
 
         printMenu();
     }
