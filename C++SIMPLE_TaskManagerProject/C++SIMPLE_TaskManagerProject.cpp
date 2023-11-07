@@ -350,7 +350,8 @@ int main()
 
     Tasks task;
 
-    std::unordered_map<int, std::function<void()> > actions = {
+    std::unordered_map<int, std::function<void()> > actions =
+    {
             {1, [&task]() { task.addTask(); }},
             {2, [&task]() { task.viewTasks(); }},
             {3, [&task]() { task.updateTask(); }},
@@ -358,7 +359,7 @@ int main()
             {5, [&task]() { task.saveData(); }},
             {6, [&task]() { task.loadData(); }},
             {7, [&task]() { task.printSavedData(); }},
-            {8, []() { std::cout << "Exit succeeded" << std::endl; }},
+            {8, []() { std::cout << "Exit succeeded" << std::endl; }}
     };
 
     for (;;)
