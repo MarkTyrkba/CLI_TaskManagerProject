@@ -1,4 +1,4 @@
-# CPP-SIMPLE_TaskManagerProject
+# CLI_TaskManagerProject
 
 This is my very simple C++ project , named Task Manager. The creation process took me two days
 
